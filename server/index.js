@@ -325,9 +325,7 @@ function buildSegmentLinesMap(lineStations) {
 }
 
 function isInterchange(stationId, stationLinesMap) {
-  return (
-    stationLinesMap[stationId] && stationLinesMap[stationId].size > 1
-  );
+  return stationLinesMap[stationId] && stationLinesMap[stationId].size > 1;
 }
 
 function getEventDelta(event) {
