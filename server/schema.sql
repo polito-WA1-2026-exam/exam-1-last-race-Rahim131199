@@ -25,7 +25,7 @@ CREATE TABLE line_stations (
 CREATE TABLE events (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   description TEXT NOT NULL,
-  delta INTEGER NOT NULL CHECK(delta BETWEEN -4 AND 4)
+  coinChange INTEGER NOT NULL CHECK(coinChange BETWEEN -4 AND 4)
 );
 
 CREATE TABLE users (
@@ -90,7 +90,7 @@ INSERT INTO line_stations (line_id, station_id, position) VALUES
 (4, 12, 4),
 (4, 6, 5);
 
-INSERT INTO events (id, description, delta) VALUES
+INSERT INTO events (id, description, coinChange) VALUES
 (1, 'Quiet Ride', 0),
 (2, 'Helpful Tourist', 1),
 (3, 'Lost Ticket', -2),
@@ -101,9 +101,9 @@ INSERT INTO events (id, description, delta) VALUES
 (8, 'Lucky Day', 4);
 
 INSERT INTO users (id, username, password_hash, salt) VALUES
-(1, 'mario', 'TEMP_HASH_1', 'TEMP_SALT_1'),
-(2, 'luca', 'TEMP_HASH_2', 'TEMP_SALT_2'),
-(3, 'anna', 'TEMP_HASH_3', 'TEMP_SALT_3');
+(1, 'mario', 'fd8a38d430be06eebd1f140808747a6e3ce679460a3cc520f5bf577e79a11882c4cd4fee4e48661a50e26172021e882e5bb7a08698ffd4558e2cc185c75eaf53', 'f94ca2a0dd00ccce828ca1d3774ef68e'),
+(2, 'luca', '9f58c495bde494de41efc205e567d3b070d1efcbe6d9116c5b4521d515fe297134df65e415b44260d88ccac2016c58ba88b28cae4addce9c1817c3ff1af33322', '3af3f9bdd2f3e49530334ee099ddc432'),
+(3, 'anna', 'eb70f483d935fe2de70bf2dd87c17a83f4950100f49132fefa39fa73ad24bb83fad17603aa8cae3647119cc0d325658bce2d20344fd139c3d5d584bc1532e8f8', '12f6f188a2e6e543f4d69c696ece3ae7');
 
 INSERT INTO games (id, user_id, start_station_id, destination_station_id, final_score, is_valid, played_at) VALUES
 (1, 1, 1, 7, 26, 1, '2026-06-01 10:00:00'),

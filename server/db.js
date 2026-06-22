@@ -8,6 +8,8 @@ const database = new sqlite.Database('./database.sqlite', (error) => {
   }
 });
 
+database.run('PRAGMA foreign_keys = ON');
+
 function getUserByUsername(username) {
   return new Promise((resolve, reject) => {
     const sql = 'SELECT * FROM users WHERE username = ?';
@@ -119,7 +121,14 @@ function getAllLineStations() {
 
 function getAllEvents() {
   return new Promise((resolve, reject) => {
-    const sql = 'SELECT id, description, coinChange FROM events ORDER BY id';
+    const sql = `
+      SELECT
+        id,
+        description,
+        coinChange
+      FROM events
+      ORDER BY id
+    `;
 
     database.all(sql, [], (error, rows) => {
       if (error) {

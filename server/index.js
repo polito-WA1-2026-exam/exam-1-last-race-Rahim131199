@@ -87,7 +87,9 @@ app.post('/api/sessions', (req, res, next) => {
     }
 
     if (!user) {
-      return res.status(401).json({ error: info.message });
+      return res.status(401).json({
+        error: info?.message || 'Incorrect username or password',
+      });
     }
 
     req.login(user, (loginError) => {
@@ -131,7 +133,7 @@ app.delete('/api/sessions/current', (req, res) => {
   });
 });
 
-app.get('/api/ranking', async (req, res) => {
+app.get('/api/ranking', isLoggedIn, async (req, res) => {
   try {
     const ranking = await db.getRanking();
     return res.json(ranking);
@@ -140,23 +142,25 @@ app.get('/api/ranking', async (req, res) => {
   }
 });
 
-app.get('/api/network', async (req, res) => {
+app.get('/api/network', isLoggedIn, async (req, res) => {
   try {
     const stations = await db.getAllStations();
     const lines = await db.getAllLines();
     const lineStations = await db.getAllLineStations();
+    const segments = await db.getAllSegments();
 
     return res.json({
       stations,
       lines,
       lineStations,
+      segments,
     });
   } catch (error) {
     return res.status(500).json({ error: 'Failed to get network data' });
   }
 });
 
-app.get('/api/events', async (req, res) => {
+app.get('/api/events', isLoggedIn, async (req, res) => {
   try {
     const events = await db.getAllEvents();
     return res.json(events);
@@ -165,7 +169,7 @@ app.get('/api/events', async (req, res) => {
   }
 });
 
-app.get('/api/segments', async (req, res) => {
+app.get('/api/segments', isLoggedIn, async (req, res) => {
   try {
     const segments = await db.getAllSegments();
     return res.json(segments);
@@ -328,7 +332,7 @@ function isInterchange(stationId, stationLinesMap) {
   return stationLinesMap[stationId] && stationLinesMap[stationId].size > 1;
 }
 
-function getEventDelta(event) {
+function getCoinChange(event) {
   if (typeof event.coinChange === 'number') return event.coinChange;
   if (typeof event.effect === 'number') return event.effect;
   if (typeof event.coin_change === 'number') return event.coin_change;
@@ -402,6 +406,15 @@ app.post('/api/game/execute', isLoggedIn, async (req, res) => {
   try {
     const { route, start_station_id, destination_station_id } = req.body;
 
+    console.log('Execute Request Received:', {
+      route,
+      routeTypes: route ? route.map(x => typeof x) : [],
+      start_station_id,
+      startType: typeof start_station_id,
+      destination_station_id,
+      destType: typeof destination_station_id
+    });
+
     const segments = await db.getAllSegments();
     const lineStations = await db.getAllLineStations();
     const events = await db.getAllEvents();
@@ -423,6 +436,8 @@ app.post('/api/game/execute', isLoggedIn, async (req, res) => {
       stationLinesMap
     );
 
+    console.log('Validation Result:', validation);
+
     if (!validation.valid) {
       return res.json({
         isValid: false,
@@ -440,7 +455,7 @@ app.post('/api/game/execute', isLoggedIn, async (req, res) => {
       const to = route[i + 1];
 
       const event = events[Math.floor(Math.random() * events.length)];
-      const delta = getEventDelta(event);
+      const delta = getCoinChange(event);
       coins += delta;
 
       steps.push({
@@ -463,6 +478,11 @@ app.post('/api/game/execute', isLoggedIn, async (req, res) => {
   } catch (error) {
     return res.status(500).json({ error: 'Failed to execute game' });
   }
+});
+
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ error: 'Internal server error' });
 });
 
 app.listen(port, () => {

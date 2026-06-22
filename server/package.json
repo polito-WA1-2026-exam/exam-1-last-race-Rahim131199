@@ -2,17 +2,10 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-<<<<<<< HEAD
-=======
-  "license": "ISC",
-  "author": "",
-  "type": "module",
->>>>>>> b32f370641509f9c7131d6ef71eac2017bf82e3c
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-<<<<<<< HEAD
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -26,9 +19,5 @@
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "sqlite3": "^6.0.1"
-=======
-  "dependencies": {
-    "express": "^5.2.1"
->>>>>>> b32f370641509f9c7131d6ef71eac2017bf82e3c
   }
 }
