@@ -55,9 +55,19 @@
 - `RankingPage` (in `pages/RankingPage.jsx`): Fetches and displays the top scores ranking.
 - `GamePage` (in `pages/GamePage.jsx`): Central game logic containing the Setup, Planning, and Result phases.
 
-## Screenshot
+## Screenshots
 
-![Screenshot](./img/screenshot.jpg)
+![ss1](./img/ss1.png)
+
+![ss2](./img/ss2.png)
+
+![ss3](./img/ss3.png)
+
+![ss4](./img/ss4.png)
+
+![ss5](./img/ss5.png)
+
+![ss6](./img/ss6.png)
 
 ## Users Credentials
 
